@@ -41,3 +41,9 @@ $ source /opt/ros/noetic/setup.bash
 $ source ~/catkin_ws/devel/setup.bash
 $ rviz
 ```
+
+## References
+kitti_run.py, data_utils.py, publish.utils adapted from https://www.youtube.com/watch?v=TBdcwwr5Wyk&list=PLDV2CyUo4q-L4YlXUWDytZPz9a8cAW <br>
+kitti_utils.py for calibration functions, code from https://github.com/charlesq34/frustum-pointnets/blob/master/kitti/kitti_util.py <br>
+function compute_3d_boxes_cam2(), used for computing 3d bounding boxes from tracklets. code from https://github.com/bostondiditeam/kitti/blob/master/resources/devkit_object/readme.txt<br>
+
