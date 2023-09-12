@@ -1,6 +1,10 @@
 # kitti_publisher
+This repository is used for validate distances estimated by ORB-SLAM2. <br>
+ground truth distance will be saved after running first iteration of all frames. <br>
+2 ways calculating ground truth data: <br>
+- minimum distance from outer bounding boxes;
+- return closest point from point clouds within bounding box
 
-this repository is used for validation.
 
 ## Prerequisites:
 Ubuntu 20.04 <br>
