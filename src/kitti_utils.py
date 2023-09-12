@@ -90,11 +90,11 @@ class Calibration(object):
         self.P = calibs['P2'] 
         self.P = np.reshape(self.P, [3,4])
         # Rigid transform from Velodyne coord to reference camera coord
-        self.V2C = calibs['Tr_velo_to_cam']
+        self.V2C = calibs['Tr_velo_cam']
         self.V2C = np.reshape(self.V2C, [3,4])
         self.C2V = inverse_rigid_trans(self.V2C)
         # Rotation from reference camera coord to rect camera coord
-        self.R0 = calibs['R0_rect']
+        self.R0 = calibs['R_rect']
         self.R0 = np.reshape(self.R0,[3,3])
 
         # Camera intrinsics and extrinsics
@@ -105,10 +105,12 @@ class Calibration(object):
         self.b_x = self.P[0,3]/(-self.f_u) # relative 
         self.b_y = self.P[1,3]/(-self.f_v)
 
+
+    '''
     def read_calib_file(self, filepath):
-        ''' Read in a calibration file and parse into a dictionary.
-        Ref: https://github.com/utiasSTARS/pykitti/blob/master/pykitti/utils.py
-        '''
+        # Read in a calibration file and parse into a dictionary.
+        # Ref: https://github.com/utiasSTARS/pykitti/blob/master/pykitti/utils.py
+        
         data = {}
         with open(filepath, 'r') as f:
             for line in f.readlines():
@@ -123,11 +125,41 @@ class Calibration(object):
                     pass
 
         return data
+    '''
+
+
     
+    def read_calib_file(self, filepath):
+        # Read in a calibration file and parse into a dictionary.
+        # Ref: https://github.com/utiasSTARS/pykitti/blob/master/pykitti/utils.py
+        
+        data = {}
+        with open(filepath, 'r') as f:
+            key = None  # Initialize key to None
+            for line in f.readlines():
+                line = line.rstrip()
+                if len(line) == 0:
+                    continue
+
+                # Check if the line starts with an identifier
+                if line.startswith('P0') or line.startswith('P1') or line.startswith('P2') or line.startswith('P3'):
+                    key = line[:2]
+                    data[key] = np.array([float(x) for x in line.split()[1:]])
+                else:
+                    # If not an identifier line, split by space and extract key and values
+                    parts = line.split()
+                    key = parts[0]
+                    data[key] = np.array([float(x) for x in parts[1:]])
+
+        return data
+    
+
+
+    '''
+    # this function is applicatble to raw data
     def read_calib_from_video(self, calib_root_dir):
-        ''' Read calibration for camera 2 from video calib files.
-            there are calib_cam_to_cam and calib_velo_to_cam under the calib_root_dir
-        '''
+        # Read calibration for camera 2 from video calib files.
+        # there are calib_cam_to_cam and calib_velo_to_cam under the calib_root_dir
         data = {}
         cam2cam = self.read_calib_file(os.path.join(calib_root_dir, 'calib_cam_to_cam.txt'))
         velo2cam = self.read_calib_file(os.path.join(calib_root_dir, 'calib_velo_to_cam.txt'))
@@ -137,7 +169,26 @@ class Calibration(object):
         data['Tr_velo_to_cam'] = np.reshape(Tr_velo_to_cam, [12])
         data['R0_rect'] = cam2cam['R_rect_00']
         data['P2'] = cam2cam['P_rect_02']
+        return data 
+    '''
+
+
+    
+    def read_calib_from_video(self, calib_filepath):
+        # Read calibration for camera 2 from video calib files.
+        # There are calib_cam_to_cam and calib_velo_to_cam under the calib_root_dir.
+        
+        data = {}
+        calib_data = self.read_calib_file(calib_filepath)
+
+        # Extract the required information
+        data['P2'] = calib_data['P2']
+        data['R_rect'] = calib_data['R_rect']
+        data['Tr_velo_cam'] = calib_data['Tr_velo_cam']
+        
         return data
+    
+
 
     def cart2hom(self, pts_3d):
         ''' Input: nx3 points in Cartesian

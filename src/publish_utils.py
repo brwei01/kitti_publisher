@@ -49,7 +49,6 @@ def publish_camera_res(cam_pub, bridge, image, boxes, distance):
 
     cam_pub.publish(bridge.cv2_to_imgmsg(image, "bgr8"))
 
-    
 
 def publish_camera_no_detection(cam_pub, bridge, image):
     cam_pub.publish(bridge.cv2_to_imgmsg(image, "bgr8"))
