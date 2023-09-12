@@ -10,11 +10,11 @@ Rviz
 ## Build project
 clone to ~/catkin_ws/src or customed ROS working directory
 ```
-cd ~/catkin_ws/src
-source /opt/ros/noetic/setup.bash
-source ~/catkin_ws/devel/setup.bash
-cd ..
-catkin_make
+$ cd ~/catkin_ws/src
+$ source /opt/ros/noetic/setup.bash
+$ source ~/catkin_ws/devel/setup.bash
+$ cd ..
+$ catkin_make
 ```
 
 ## Run the project
