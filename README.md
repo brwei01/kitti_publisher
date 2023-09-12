@@ -3,8 +3,8 @@
 this repository is used for validation.
 
 ## Prerequisites:
-Ubuntu 20.04
-ROS Noetic 1.16.0
+Ubuntu 20.04 <br>
+ROS Noetic 1.16.0 <br>
 Rviz
 
 ## Build project
